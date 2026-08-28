@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="云餐宝——智慧餐饮点餐与门店管理系统，覆盖菜单管理、桌台管理、点餐结算、订单管理与销售统计。">
+<title>云餐宝 · 智慧餐饮点餐管理系统</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ 登录 / 注册 ============ -->
+<div id="login-view" class="login-view hidden">
+  <div class="login-card">
+    <div class="login-logo">☕</div>
+    <h1>云餐宝</h1>
+    <p class="login-sub">智慧餐饮点餐与门店管理系统</p>
+    <div id="login-form">
+      <div class="field">
+        <label for="login-username">用户名</label>
+        <input id="login-username" type="text" placeholder="请输入用户名" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="login-password">密码</label>
+        <input id="login-password" type="password" placeholder="请输入密码" autocomplete="current-password">
+      </div>
+      <button id="btn-login" class="btn btn-primary btn-block" type="button">登 录</button>
+      <button id="btn-goto-register" class="btn btn-ghost btn-block" type="button">没有账号？注册一个</button>
+      <div class="login-tip">演示账号：admin / admin123（管理员）　staff / staff123（店员）</div>
+    </div>
+    <div id="register-form" class="hidden">
+      <div class="field">
+        <label for="reg-username">用户名</label>
+        <input id="reg-username" type="text" placeholder="4-16位字母或数字">
+      </div>
+      <div class="field">
+        <label for="reg-name">昵称</label>
+        <input id="reg-name" type="text" placeholder="您的称呼">
+      </div>
+      <div class="field">
+        <label for="reg-password">密码</label>
+        <input id="reg-password" type="password" placeholder="请输入密码">
+      </div>
+      <div class="field">
+        <label for="reg-password2">确认密码</label>
+        <input id="reg-password2" type="password" placeholder="再次输入密码">
+      </div>
+      <button id="btn-register" class="btn btn-primary btn-block" type="button">注 册</button>
+      <button id="btn-goto-login" class="btn btn-ghost btn-block" type="button">已有账号？去登录</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 主应用 ============ -->
+<div id="app-view" class="app-view hidden">
+  <aside class="sidebar">
+    <div class="brand">☕ <b>云餐宝</b></div>
+    <nav class="nav">
+      <a href="javascript:void(0)" class="nav-item active" data-view="dashboard">📊 经营看板</a>
+      <a href="javascript:void(0)" class="nav-item" data-view="menu">🍽️ 菜单管理</a>
+      <a href="javascript:void(0)" class="nav-item" data-view="tables">🪑 桌台管理</a>
+      <a href="javascript:void(0)" class="nav-item" data-view="orders">🧾 订单管理</a>
+      <a href="javascript:void(0)" class="nav-item" data-view="settings">⚙️ 系统设置</a>
+    </nav>
+    <div class="user-box">
+      <div class="user-name" id="current-user">--</div>
+      <div class="user-role" id="current-role">--</div>
+      <button id="btn-logout" class="btn btn-ghost btn-sm" type="button">退出登录</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h1 id="view-title">经营看板</h1>
+      <div class="topbar-right">
+        <span class="status-pill" id="shop-status-pill">营业中</span>
+        <button id="btn-cart" class="btn btn-primary" type="button">🛒 购物车 <span class="cart-badge" id="cart-badge">0</span></button>
+      </div>
+    </header>
+
+    <!-- 看板 -->
+    <section id="view-dashboard" class="view active">
+      <div class="stat-grid" id="stat-cards"></div>
+      <div class="chart-grid">
+        <div class="card">
+          <h3>热销菜品 TOP5</h3>
+          <div id="chart-top" class="chart-box"></div>
+        </div>
+        <div class="card">
+          <h3>菜品分类占比</h3>
+          <div id="chart-category" class="chart-box"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>最近订单</h3>
+        <div id="recent-orders" class="list"></div>
+      </div>
+    </section>
+
+    <!-- 菜单管理 -->
+    <section id="view-menu" class="view">
+      <div class="toolbar">
+        <input id="menu-search" class="input" type="text" placeholder="搜索菜品名称…">
+        <select id="menu-category-filter" class="input"></select>
+        <button id="btn-add-dish" class="btn btn-primary" type="button">＋ 新增菜品</button>
+      </div>
+      <div class="card">
+        <table class="table" id="menu-table">
+          <thead>
+            <tr><th>菜品</th><th>分类</th><th>价格</th><th>库存</th><th>销量</th><th>状态</th><th>操作</th></tr>
+          </thead>
+          <tbody id="menu-tbody"></tbody>
+        </table>
+        <p id="menu-empty" class="empty hidden">暂无菜品，点击“新增菜品”添加吧～</p>
+      </div>
+    </section>
+
+    <!-- 桌台管理 -->
+    <section id="view-tables" class="view">
+      <div class="toolbar">
+        <button id="btn-add-table" class="btn btn-primary" type="button">＋ 新增桌台</button>
+        <button id="btn-reset-tables" class="btn btn-ghost" type="button">一键清空桌台</button>
+      </div>
+      <div id="table-grid" class="table-grid"></div>
+    </section>
+
+    <!-- 订单管理 -->
+    <section id="view-orders" class="view">
+      <div class="toolbar">
+        <select id="order-status-filter" class="input">
+          <option value="all">全部状态</option>
+          <option value="pending">待支付</option>
+          <option value="preparing">制作中</option>
+          <option value="done">已完成</option>
+          <option value="cancelled">已取消</option>
+        </select>
+        <button id="btn-export-orders" class="btn btn-ghost" type="button">导出订单 JSON</button>
+      </div>
+      <div id="order-list" class="list"></div>
+    </section>
+
+    <!-- 系统设置 -->
+    <section id="view-settings" class="view">
+      <div class="settings-grid">
+        <div class="card">
+          <h3>店铺信息</h3>
+          <div class="field"><label>店铺名称</label><input id="set-shop-name" class="input" type="text"></div>
+          <div class="field"><label>店铺公告</label><textarea id="set-shop-notice" class="input" rows="3"></textarea></div>
+          <div class="field">
+            <label>营业状态</label>
+            <select id="set-shop-open" class="input">
+              <option value="true">营业中</option>
+              <option value="false">休息中</option>
+            </select>
+          </div>
+          <button id="btn-save-shop" class="btn btn-primary" type="button">保存店铺信息</button>
+        </div>
+        <div class="card">
+          <h3>账号管理</h3>
+          <div class="field"><label>当前登录</label><input id="set-account-info" class="input" type="text" readonly></div>
+          <div class="field"><label>新密码（留空则不修改）</label><input id="set-new-password" class="input" type="password"></div>
+          <button id="btn-change-password" class="btn btn-primary" type="button">修改密码</button>
+        </div>
+        <div class="card">
+          <h3>数据管理</h3>
+          <p class="muted">所有数据保存在浏览器本地（localStorage），可导出备份或导入恢复。</p>
+          <div class="btn-row">
+            <button id="btn-export-data" class="btn btn-ghost" type="button">导出数据</button>
+            <button id="btn-import-data" class="btn btn-ghost" type="button">导入数据</button>
+            <button id="btn-reset-data" class="btn btn-danger" type="button">恢复初始数据</button>
+          </div>
+          <input id="import-file" type="file" accept=".json" class="hidden">
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 购物车抽屉 -->
+<div id="cart-drawer" class="cart-drawer hidden">
+  <div class="cart-head">
+    <h3>🛒 购物车</h3>
+    <button id="btn-close-cart" class="icon-btn" type="button">✕</button>
+  </div>
+  <div id="cart-items" class="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-total">合计：<b id="cart-total">¥0.00</b></div>
+    <div class="field"><label>选择桌台</label><select id="cart-table" class="input"></select></div>
+    <div class="field"><label>备注</label><input id="cart-remark" class="input" type="text" placeholder="口味、忌口等备注"></div>
+    <button id="btn-submit-order" class="btn btn-primary btn-block" type="button">提交订单</button>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/store.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/tables.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
+
